@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>EMD Calculator WCL - Calculate 2% Tender EMD</title>
+    <meta name="description" content="Free and instant EMD Calculator for WCL tenders with multiple fields. Easily calculate 2% of the total estimate value (capped at Rs. 50 Lakhs), rounded to the nearest 1000. As per Purchase Manual Clause 10.3.7.1.">
+    <meta name="keywords" content="EMD calculator, WCL, Earnest Money Deposit, tender calculator, 2% EMD, online calculator, WCL tenders, MROUND, Purchase Manual, 10.3.7.1, estimate value, Pratik Bihari">
+    <meta name="author" content="Pratik Bihari">
+
+    <!-- Favicon - A simple calculator icon -->
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4' y='2' width='16' height='20' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='8' y1='6' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='12' y1='10' x2='12' y2='18'%3E%3C/line%3E%3Cline x1='8' y1='14' x2='16' y2='14'%3E%3C/line%3E%3C/svg%3E">
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            overflow-x: hidden;
+        }
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] { -moz-appearance: textfield; }
+        .shape-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        .shape { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.7; animation: move 25s infinite alternate; }
+        .shape-1 { width: 300px; height: 300px; background-color: #3b82f6; top: -50px; left: -50px; animation-duration: 20s; }
+        .shape-2 { width: 400px; height: 400px; background-color: #8b5cf6; bottom: -100px; right: -100px; animation-duration: 25s; animation-delay: -5s; }
+        .shape-3 { width: 250px; height: 250px; background-color: #ec4899; bottom: 10%; left: 20%; animation-duration: 30s; animation-delay: -10s; }
+        @keyframes move { from { transform: translate(0, 0) rotate(0deg); } to { transform: translate(100px, 50px) rotate(180deg); } }
+        .card-animate { animation: float-in 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes float-in { to { opacity: 1; transform: translateY(0); } }
+        .copy-button {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 9999px;
+            padding: 0.25rem;
+            transition: background-color 0.2s;
+            width: 2rem; /* Ensure button has a fixed size */
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .copy-button:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+
+</head>
+<body class="text-gray-800">
+
+    <!-- Background Shapes Container -->
+    <div class="shape-container">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <!-- Main Content Wrapper -->
+    <main class="min-h-screen flex flex-col items-center justify-center p-4">
+        
+        <div class="w-full max-w-4xl mx-auto bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl shadow-gray-900/20 p-6 md:p-8 border border-white/20 card-animate">
+
+            <!-- Header -->
+            <header class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-700">EMD Calculator WCL</h1>
+                <p class="text-lg text-gray-600 mt-3">Calculate multiple Earnest Money Deposits instantly.</p>
+            </header>
+
+            <!-- Calculator Form -->
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4" id="calculator-grid">
+                <!-- Left Column for Inputs -->
+                <div id="input-column" class="space-y-4">
+                    <h2 class="text-xl font-bold text-gray-700 text-center">Total Estimate Value (₹)</h2>
+                </div>
+                <!-- Right Column for Outputs -->
+                <div id="output-column" class="space-y-4">
+                    <h2 class="text-xl font-bold text-gray-700 text-center">Calculated EMD (₹)</h2>
+                </div>
+            </section>
+            
+            <!-- Footer Information -->
+            <footer class="text-center mt-8 pt-6 border-t border-gray-200">
+                <p class="text-sm text-gray-500">EMD is 2% of Estimate Value (max Rs. 50 Lakhs), rounded to the nearest thousand.</p>
+                <p class="text-sm text-slate-400 mt-4 font-medium">Design and Developed by <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Pratik Bihari</span></p>
+            </footer>
+        </div>
+
+        <!-- Collapsible Purchase Manual Clause Section -->
+        <section class="max-w-4xl w-full mx-auto mt-6">
+            <div class="bg-slate-800/50 border border-slate-700 rounded-lg">
+                <button id="toggleClause" class="w-full flex justify-between items-center text-left p-4 focus:outline-none">
+                    <h2 class="text-lg font-bold text-white">Purchase Manual Clause 10.3.7.1</h2>
+                    <svg id="chevronIcon" class="w-5 h-5 text-white transition-transform duration-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                    </svg>
+                </button>
+                <div id="clauseContent" class="hidden text-white/70 text-sm px-4 pb-4 leading-relaxed">
+                    <p class="mb-2"><strong>Earnest Money Deposit (EMD) is also known as Bid Security.</strong> Primary objective of Earnest Money Deposit (EMD) is to ensure the earnestness of the bidders in the participation of the procurement process. EMD will act as the deterrent against the bidders withdrawing or altering his bid during its validity. EMD shall be interest free.</p>
+                    <p class="mb-2">In cases of Open / Limited Tender Enquires, EMD is to be obtained from the bidders except those who are registered with CIL / Subsidiary Company, Ancillary units of Subsidiary Company, MSEs as defined in clause – 2.8.2.1, Start-ups and Central / State Government Organizations / PSUs, irrespective of the stores for which they are registered. In case of Single Tender Enquiry – both with PAC and without PAC, EMD will not be asked. EMD will not be asked in case of OEM / OES or their authorized Agents participating in Open / Limited tenders for procurement of spare parts for their equipment as well.</p>
+                    <p>The Bidders are required to furnish EMD along with their bids in the manner as provided in the bid document. <strong>Amount of EMD should ordinarily be 2% of the estimated value of the goods to be purchased (rounded off to the nearest thousands of Rupees) or Rs. 50.00 Lakhs</strong> (equivalent USD calculated based on exchange rate prevailing on the date of preparation of NIT and rounded off to nearest 100 for foreign bidders in case of global tender), <strong>whichever is lower.</strong> Depending on the total value of purchase, the exact amount of EMD should be worked out and indicated in the tender document.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        window.onload = function() {
+            const inputColumn = document.getElementById('input-column');
+            const outputColumn = document.getElementById('output-column');
+            const numberOfFields = 10;
+
+            // --- Generate Multiple Input/Output Fields ---
+            for (let i = 1; i <= numberOfFields; i++) {
+                // Create and append input field to the left column
+                const inputWrapper = document.createElement('div');
+                inputWrapper.className = 'relative h-14';
+                inputWrapper.innerHTML = `
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500">${i}.</span>
+                    <input type="text" inputmode="numeric" pattern="[0-9]*" id="totalValue-${i}" data-row-id="${i}" placeholder="Enter value" class="totalValueInput w-full h-full text-lg pl-10 pr-4 bg-gray-50 border-gray-300 rounded-xl focus:ring-4 focus:ring-blue-300 focus:border-blue-500 transition duration-300 ease-in-out shadow-sm focus:shadow-lg">
+                `;
+                inputColumn.appendChild(inputWrapper);
+
+                // Create and append output field to the right column
+                const resultDiv = document.createElement('div');
+                resultDiv.className = 'bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl p-2 text-center shadow-lg shadow-indigo-500/30 h-14 flex flex-col items-center justify-center';
+                
+                const innerResultWrapper = document.createElement('div');
+                innerResultWrapper.className = 'flex items-center gap-2';
+                
+                const resultP = document.createElement('p');
+                resultP.id = `result-${i}`;
+                resultP.className = 'text-2xl font-bold text-white tracking-tight leading-tight';
+                resultP.textContent = '₹0';
+                
+                const copyButton = document.createElement('button');
+                copyButton.className = 'copy-button';
+                copyButton.dataset.rowId = i;
+                copyButton.title = 'Copy to Clipboard';
+                copyButton.innerHTML = `
+                    <span class="copy-icon">
+                        <svg class="w-4 h-4 text-indigo-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2m-6 12h8a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-8a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2z" /></svg>
+                    </span>
+                    <span class="copy-feedback hidden text-xs text-white">Copied!</span>
+                `;
+                
+                innerResultWrapper.appendChild(resultP);
+                innerResultWrapper.appendChild(copyButton);
+                
+                const noteP = document.createElement('p');
+                noteP.id = `calculation-note-${i}`;
+                noteP.className = 'text-[10px] text-indigo-200 h-3';
+
+                resultDiv.appendChild(innerResultWrapper);
+                resultDiv.appendChild(noteP);
+                outputColumn.appendChild(resultDiv);
+            }
+
+            // --- EMD Calculation Logic ---
+            const allValueInputs = document.querySelectorAll('.totalValueInput');
+
+            function calculateEMD(inputElement) {
+                const rowId = inputElement.dataset.rowId;
+                const resultDisplay = document.getElementById(`result-${rowId}`);
+                const noteDisplay = document.getElementById(`calculation-note-${rowId}`);
+
+                // Sanitize input to only allow numbers
+                const sanitizedValue = inputElement.value.replace(/[^0-9]/g, '');
+                inputElement.value = sanitizedValue;
+
+                const totalValue = parseFloat(sanitizedValue);
+                if (isNaN(totalValue) || totalValue <= 0) {
+                    resultDisplay.textContent = '₹0';
+                    noteDisplay.textContent = '';
+                    return;
+                }
+                const initialEmd = totalValue * 0.02;
+                const roundedEmd = Math.round(initialEmd / 1000) * 1000;
+                const finalEmd = Math.min(roundedEmd, 5000000);
+                const formattedResult = finalEmd.toLocaleString('en-IN');
+                
+                resultDisplay.textContent = `₹${formattedResult}`;
+
+                let noteText = `(2% is ₹${initialEmd.toLocaleString('en-IN', {maximumFractionDigits: 0})})`;
+                if (roundedEmd > 5000000) {
+                    noteText += ' & capped at ₹50L';
+                }
+                noteDisplay.textContent = noteText;
+            }
+
+            allValueInputs.forEach(input => {
+                input.addEventListener('input', (e) => calculateEMD(e.target));
+            });
+            
+            // --- Copy Button Logic ---
+            const copyButtons = document.querySelectorAll('.copy-button');
+            copyButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const currentButton = e.currentTarget;
+                    const rowId = currentButton.dataset.rowId;
+                    const resultText = document.getElementById(`result-${rowId}`).textContent;
+                    const valueToCopy = resultText.replace('₹', '').replace(/,/g, '');
+
+                    if (!valueToCopy || valueToCopy === '0') return;
+
+                    const textArea = document.createElement('textarea');
+                    textArea.value = valueToCopy;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        
+                        // Provide visual feedback
+                        const icon = currentButton.querySelector('.copy-icon');
+                        const feedback = currentButton.querySelector('.copy-feedback');
+                        if (icon && feedback) {
+                            icon.classList.add('hidden');
+                            feedback.classList.remove('hidden');
+                            setTimeout(() => {
+                                icon.classList.remove('hidden');
+                                feedback.classList.add('hidden');
+                            }, 1500);
+                        }
+                    } catch (err) {
+                        console.error('Failed to copy text: ', err);
+                    }
+                    document.body.removeChild(textArea);
+                });
+            });
+
+            // --- Accordion Logic for Purchase Manual Clause ---
+            const toggleButton = document.getElementById('toggleClause');
+            const clauseContent = document.getElementById('clauseContent');
+            const chevronIcon = document.getElementById('chevronIcon');
+
+            toggleButton.addEventListener('click', () => {
+                clauseContent.classList.toggle('hidden');
+                chevronIcon.classList.toggle('rotate-180');
+            });
+        };
+    </script>
+
+</body>
+</html>
